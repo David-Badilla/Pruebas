@@ -46,23 +46,23 @@ always #1 clk=~clk;
 always@(posedge clk)begin
   if(clock_counter > 4) begin
     rst = 0;
-    prueba();
+    prueba(); // LLama a una funcion prueba
   end else begin
     rst=1;
-    clock_counter= clock_counter+1;
+    clock_counter= clock_counter+1;	
   end
 end
  int ciclo =0;
  int dato =0;
  
-  task prueba();
+  task prueba();		//funcion prueba
 
-      if(full==1)begin
+      if(full==1)begin // Cambia si la fifo está llena
         ciclo=1;
       end
 
   case(ciclo)
-    0: begin
+    0: begin 		// ciclo de llenado de fifo
       rst = 0;
       push = ~push;
       pop=0;
@@ -73,7 +73,7 @@ end
         dato=dato+1;
       end
     end
-    1: begin
+    1: begin		//ciclo de vaciado 
       rst = 0;
       push =0;
       pop=~pop;
