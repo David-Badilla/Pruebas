@@ -32,10 +32,11 @@ module Sim_fifo;
 	
     int clock_counter;
     
-    int 1finalizado;
-    int 2finalizado;
-    int 3finalizado;
-    int 4finalizado;
+	int Cerofin;
+    int Primfin;
+    int Segfin;
+    int Terfin;
+    int Cuarfin;
     
 
 initial begin
@@ -46,28 +47,30 @@ initial begin
         Din=0;
         clock_counter =0;
         
-        
-		1finalizado=0;
-		2finalizado=0;
-		3finalizado=0;
-		4finalizado=0;
+        Cerofin=1;
+		Primfin=0;
+		Segfin=0;
+		Terfin=0;
+		Cuarfin=0;
 end
 
 always #1 clk=~clk;   
 always@(posedge clk)begin
   if(clock_counter > 4) begin
     rst = 0;
-    prueba(); // LLama a una funcion prueba
-    if(1finalizado==1)begin
+	if (Cerofin==1)begin
+    	prueba(); // LLama a una funcion prueba
+	end
+    if(Primfin==1)begin
     	overflow();
     	end
-    	if (2finalizado==1)begin
+    	if (Segfin==1)begin
     		underflow();
     		end
-    		if(3finalizado==1)begin
+    		if(Terfin==1)begin
     			pushpop();
     			end
-    			if(4finalizado==1)begin
+    			if(Cuarfin==1)begin
     				pushpopinter();
     				end
   end else begin
@@ -105,8 +108,9 @@ end
         $display("at %g poped data: %g count: %g",$time,Dout,Sim_fifo.uut.count);
       end
       if(pndng == 0)begin
-      	1finalizado=1;
-        $finish;
+		Cerofin=0;
+      	Primfin=1;
+        
       end
     end
     default:begin
@@ -117,31 +121,33 @@ end
   endtask
  //---------------------------------------------------------------------
   task overflow();
-  		$display("OVERFLOW");
-  		2finalizada=1;
+  		$display("-------PRUEBA OVERFLOW-------------------------------------");
+		Primfin=0;  		
+		Segfin=1;
+
+		
   
   endtask
   
   //---------------------------------------------------------------------
   task underflow();
-  		$display("Si funcionó");
-  		3finalizada=1;
-  
-  
+  		$display("-------PRUEBA UNDERFLOW------------------------------------");
+		Segfin=0;
+  		Terfin=1;
+		
   endtask
   
  //---------------------------------------------------------------------
   task pushpop();
-  		$display("Si funcionó");
-  		4finalizada=1;
-  
-  
+  		$display("-------PRUEBA PUSH POP-------------------------------------");
+		Terfin=0;
+		Cuarfin=1;
   endtask
  //---------------------------------------------------------------------
-  task pushpop();
-  		$display("Si funcionó");
+  task pushpopinter();
+  		$display("-------PRUEBA PUSH POP INTERCALADO-------------------------");
   
-  
+  $finish;
   endtask
 
 endmodule
