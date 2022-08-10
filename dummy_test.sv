@@ -31,6 +31,12 @@ module Sim_fifo;
     );
 	
     int clock_counter;
+    
+    int 1finalizado;
+    int 2finalizado;
+    int 3finalizado;
+    int 4finalizado;
+    
 
 initial begin
 	clk=0;
@@ -39,7 +45,12 @@ initial begin
         pop = 0;
         Din=0;
         clock_counter =0;
-		
+        
+        
+		1finalizado=0;
+		2finalizado=0;
+		3finalizado=0;
+		4finalizado=0;
 end
 
 always #1 clk=~clk;   
@@ -47,6 +58,18 @@ always@(posedge clk)begin
   if(clock_counter > 4) begin
     rst = 0;
     prueba(); // LLama a una funcion prueba
+    if(1finalizado==1)begin
+    	overflow();
+    	end
+    	if (2finalizado==1)begin
+    		underflow();
+    		end
+    		if(3finalizado==1)begin
+    			pushpop();
+    			end
+    			if(4finalizado==1)begin
+    				pushpopinter();
+    				end
   end else begin
     rst=1;
     clock_counter= clock_counter+1;	
@@ -75,13 +98,14 @@ end
     end
     1: begin		//ciclo de vaciado 
       rst = 0;
-      push =0;
+      push = 0;
       pop=~pop;
       Din = dato;
       if(pop==1)begin
         $display("at %g poped data: %g count: %g",$time,Dout,Sim_fifo.uut.count);
       end
       if(pndng == 0)begin
+      	1finalizado=1;
         $finish;
       end
     end
@@ -90,6 +114,34 @@ end
       $finish;
     end
   endcase
+  endtask
+ //---------------------------------------------------------------------
+  task overflow();
+  		$display("OVERFLOW");
+  		2finalizada=1;
+  
+  endtask
+  
+  //---------------------------------------------------------------------
+  task underflow();
+  		$display("Si funcionó");
+  		3finalizada=1;
+  
+  
+  endtask
+  
+ //---------------------------------------------------------------------
+  task pushpop();
+  		$display("Si funcionó");
+  		4finalizada=1;
+  
+  
+  endtask
+ //---------------------------------------------------------------------
+  task pushpop();
+  		$display("Si funcionó");
+  
+  
   endtask
 
 endmodule
