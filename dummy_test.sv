@@ -239,7 +239,7 @@ end
 
   		
   
-  $finish;
+  //$finish;
   endtask
 
 endmodule
