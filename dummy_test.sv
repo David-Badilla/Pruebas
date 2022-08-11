@@ -102,6 +102,7 @@ end
       	
       	dato=0;	//Reinicio de variables importantes en las siguientes pruebas
       	ciclo=0;
+      	pop=0;
       	
       	
       	rst=1;	//Cambio para aplicar reset despues de acabar esta prueba
@@ -133,6 +134,7 @@ end
 		
 		dato=0; //Reinicio variable dato
 		pop=0; //por fallos en el inicio de la siguiente prueba
+		push=0;
 		
 		rst=1; //Variables para aplicar reset
 		clock_counter=0;
@@ -177,17 +179,15 @@ end
 	  end else begin
 	    dato=dato+1;
 	  end
-  	
-  	
-  	
- 
-      
+  	  
       
      if(dato == 17)begin	//Para detener la prueba luego de 17 datos
 		NumeroPrueba=4; //Actualiza para hacer una siguiente prueba
 		
 		ciclo=0;
 		dato=0;
+		push=0;
+		pop=0;
 		
 		rst=1;		//Aplicar el reset antes de iniciar la siguiente prueba
 		clock_counter=0;	//Reiniciar el contador para aplicar reset por 4 ciclos
