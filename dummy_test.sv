@@ -31,14 +31,7 @@ module Sim_fifo;
     );
 	
     int clock_counter;
-    
-	int Cerofin;  // variables de control se activa una a una cada vez que finaliza una prueba
-    int Primfin;
-    int Segfin;
-    int Terfin;
-    int Cuarfin;
-    
-
+	int NumeroPrueba;
 initial begin
 	clk=0;
 	rst = {1'b1};
@@ -47,30 +40,27 @@ initial begin
         Din=0;
         clock_counter=0;
         
-        Cerofin=1; //variables de control se activa una a una cada vez que finaliza una prueba
-		Primfin=0;
-		Segfin=0;
-		Terfin=0;
-		Cuarfin=0;
+		NumeroPrueba=0;
+		
 end
 
 always #1 clk=~clk;   
 always@(posedge clk)begin
   if(clock_counter > 4) begin	//Verifica si ya pasaron los 4 ciclos de reinicio
     rst = 0;
-	if (Cerofin==1)begin //Revisa variables de control que cabian progresivamente
+	if (NumeroPrueba==0)begin //Revisa variables de control que cabian progresivamente
     	prueba(); // LLama a una funcion prueba
 	end
-    if(Primfin==1)begin
+    if(NumeroPrueba==1)begin
     	overflow();
     	end
-	if (Segfin==1)begin
+	if (NumeroPrueba==2)begin
 		underflow();
 		end
-	if(Terfin==1)begin
+	if(NumeroPrueba==3)begin
 		pushpop();
 		end
-	if(Cuarfin==1)begin
+	if(NumeroPrueba==4)begin
 		pushpopinter();
 		end
   end else begin
@@ -108,9 +98,7 @@ end
         $display("at %g poped data: %g count: %g",$time,Dout,Sim_fifo.uut.count);
       end
       if(pndng == 0)begin //La prueba actual finaliza
-		
-		Cerofin=0;//Cambio de variables de control para activar la siguiente 
-      	Primfin=1;
+		NumeroPrueba=1; //Actualiza para hacer una siguiente prueba
       	
       	dato=0;	//Reinicio de variables importantes en las siguientes pruebas
       	ciclo=0;
@@ -141,8 +129,7 @@ end
 	  end
   	  		
 	  if(dato==40)begin // para detener la prueba luego de 40 datos
-	  	Primfin=0;  //Variables de control de siguiente prueba
-		Segfin=1;
+		NumeroPrueba=2; //Actualiza para hacer una siguiente prueba
 		
 		dato=0; //Reinicio variable dato
 		pop=0; //por fallos en el inicio de la siguiente prueba
@@ -166,11 +153,8 @@ end
       end
   		
   	if (dato==20)begin //detiene la prueba luego de introducir 20 datos solo porque si
+  		NumeroPrueba=3; //Actualiza para hacer una siguiente prueba
   		
-  		Segfin=0;// variables de control para iniciar la siguiente prueba
-		Terfin=1;
-		
-		
 		dato=0;//reinicio de dato para la siguiente prueba
 		push=0;
 		pop=0;
@@ -200,8 +184,7 @@ end
       
       
      if(dato == 17)begin	//Para detener la prueba luego de 17 datos
-		Terfin=0;	//Variables de control para continuar con la siguiente prueba
-		Cuarfin=1;
+		NumeroPrueba=4; //Actualiza para hacer una siguiente prueba
 		
 		ciclo=0;
 		dato=0;
