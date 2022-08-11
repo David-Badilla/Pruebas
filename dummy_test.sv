@@ -188,7 +188,7 @@ end
   	pop=~pop;
   	
   	if(push==1 && pop==1)begin
-	    $display("at %g pushed data: %g oped data: %g count %g",$time,dato,Dout,Sim_fifo.uut.count);
+	    $display("at %g pushed data: %g poped data: %g count %g",$time,dato,Dout,Sim_fifo.uut.count);
 	  end else begin
 	    dato=dato+1;
 	  end
@@ -214,7 +214,11 @@ end
   endtask
  //--------------------PRUEBA PUSH POP INTERCALADO-------------------------------------------------
   task pushpopinter();
-  ciclo=~ciclo;
+  
+  if(dato == 17)begin
+    $finish;
+        
+  end
   case(ciclo)
     0: begin 		// ciclo de llenado de fifo
       rst = 0;
@@ -225,6 +229,7 @@ end
         $display("at %g pushed data: %g count %g",$time,dato,Sim_fifo.uut.count);
       end else begin
         dato=dato+1;
+        ciclo=~ciclo;
       end
     end
     1: begin		//ciclo de vaciado 
@@ -234,7 +239,7 @@ end
       Din = dato;
       if(pop==1)begin
         $display("at %g poped data: %g count: %g",$time,Dout,Sim_fifo.uut.count);
-        
+        ciclo=~ciclo;
       end
     end
     
@@ -244,13 +249,10 @@ end
       $finish;
     end
   endcase
-  if(dato == 17)begin
-    $finish;
-        
-  end
+
   		
   
-  
+  $finish;
   endtask
 
 endmodule
