@@ -64,15 +64,15 @@ always@(posedge clk)begin
     if(Primfin==1)begin
     	overflow();
     	end
-    	if (Segfin==1)begin
-    		underflow();
-    		end
-    		if(Terfin==1)begin
-    			pushpop();
-    			end
-    			if(Cuarfin==1)begin
-    				pushpopinter();
-    				end
+	if (Segfin==1)begin
+		underflow();
+		end
+	if(Terfin==1)begin
+		pushpop();
+		end
+	if(Cuarfin==1)begin
+		pushpopinter();
+		end
   end else begin
     rst=1;
     clock_counter= clock_counter+1;	
@@ -110,7 +110,8 @@ end
       if(pndng == 0)begin
 		Cerofin=0;
       	Primfin=1;
-        
+      	dato=0;
+        $display("-------PRUEBA OVERFLOW-------------------------------------");
       end
     end
     default:begin
@@ -119,33 +120,67 @@ end
     end
   endcase
   endtask
- //---------------------------------------------------------------------
+ //--------------PRUEBA OVERFLOW-------------------------------------------------------
   task overflow();
-  		$display("-------PRUEBA OVERFLOW-------------------------------------");
-		Primfin=0;  		
-		Segfin=1;
+
+
+  case(ciclo)
+    0: begin 		// ciclo de llenado de fifo
+      rst = 0;
+      push = ~push;
+      pop=0;
+      Din = dato;
+      if(push==1)begin
+        $display("at %g pushed data: %g count %g Salida %g",$time,dato,Sim_fifo.uut.count,Dout);
+      end else begin
+        dato=dato+1;
+      end
+    end
+  		
+  		
+  	  		
+  if(dato==40)begin // Cambia si la fifo está llena
+        
+        
+	  $display("-------PRUEBA UNDERFLOW------------------------------------");
+			Primfin=0;  		
+			Segfin=1;
+		    
+        
+        
+      end	
+  		
+  		
+  		
+  		
+  		
+  		
 
 		
   
   endtask
   
-  //---------------------------------------------------------------------
+  //------------------PRUEBA UNDERFLOW---------------------------------------------------
   task underflow();
-  		$display("-------PRUEBA UNDERFLOW------------------------------------");
+  		
+  		
+  		
+  		
 		Segfin=0;
   		Terfin=1;
-		
+		$display("-------PRUEBA PUSH POP-------------------------------------");
   endtask
   
- //---------------------------------------------------------------------
+ //--------------------PRUEBA PUSH POP-------------------------------------------------
   task pushpop();
-  		$display("-------PRUEBA PUSH POP-------------------------------------");
+  		
 		Terfin=0;
 		Cuarfin=1;
+		$display("-------PRUEBA PUSH POP INTERCALADO-------------------------");
   endtask
- //---------------------------------------------------------------------
+ //--------------------PRUEBA PUSH POP INTERCALADO-------------------------------------------------
   task pushpopinter();
-  		$display("-------PRUEBA PUSH POP INTERCALADO-------------------------");
+  		
   
   $finish;
   endtask
