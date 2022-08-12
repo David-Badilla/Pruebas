@@ -163,7 +163,7 @@ end
 		
 		rst=1;	//Para aplicar un reset al finalizar esta prueba
 		clock_counter=0;	//reinicia contador para aplicar reset por 4 ciclos
-		$display("-------PRUEBA PUSH POP-------------------------------------"); //Imprime el siguiente titulo
+		$display("-------PRUEBA PUSH POP AL MISMO TIEMPO-------------------------------------"); //Imprime el siguiente titulo
 	end
 	
   endtask
@@ -204,8 +204,7 @@ end
   if(dato == 17)begin //Detiene la prueba luego de n datos escritos en push
     $finish;
         
-  end
-  
+  end 
   case(ciclo)
     0: begin 		// ciclo de llenado de push
       rst = 0;
@@ -216,7 +215,7 @@ end
         $display("at %g pushed data: %g count %g",$time,dato,Sim_fifo.uut.count);
       end else begin
         dato=dato+1;
-        ciclo=~ciclo;		//Cambia la variable ciclo para que en el siguiente ciclo sea de pop
+        ciclo=1;		//Cambia la variable ciclo para que en el siguiente ciclo sea de pop
       end
     end
     1: begin		//ciclo de pop
@@ -226,8 +225,10 @@ end
       Din = dato;
       if(pop==1)begin
         $display("at %g poped data: %g count: %g",$time,Dout,Sim_fifo.uut.count);
-        ciclo=~ciclo;		//Cambia la variable ciclo para que en el siguiente ciclo sea de push
-      end
+    
+      end else begin
+        ciclo=0;		//Cambia la variable ciclo para que en el siguiente ciclo sea de push
+		end
     end
     
     
@@ -237,7 +238,7 @@ end
     end
   endcase
 
-  		
+
   
   //$finish;
   endtask
